@@ -11,6 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Auth::routes();
+
+Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+
+// Questions Route - question view and their multiple choice answers
+Route::get('/question/{question}', 'QuestionController@show')->name('question_index');
+
+// Questions Route - processing for user answer submission
+Route::post('/question/{question}/submit', 'AnswerController@store')->name('question_submit');
+
