@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-            {!! Form::open(['action'=> ['AnswerController@store', $question->id], 'method' => 'POST', 'class'=>'form-group']) !!}
+            {!! Form::open(['action'=> ['QuestionController@store', $question->id], 'method' => 'POST', 'class'=>'form-group']) !!}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {!! Form::label('question_'.$question->id, $question->question, ['class'=>'form-group']) !!}

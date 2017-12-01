@@ -4,7 +4,7 @@
                         <ul class="list-group">
                         @if(count($unanswered_pagination->items()))
                             @foreach ($unanswered_pagination->items() as $question)
-                            <a href="/question/{{ $question->id }}/index" class="list-group-item list-group-item-action">{{ $question->question }}</a>
+                            <a href="/question/{{ $question->id }}" class="list-group-item list-group-item-action">{{ $question->question }}</a>
                             @endforeach
                             {{ $unanswered_pagination->links() }}
                         @else

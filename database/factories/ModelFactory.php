@@ -43,7 +43,7 @@ $factory->define(Option::class, function (Faker $faker) {
     } else {
         // If no questions are found with the above criteria
         // Associate option to a new question
-        $fake_question_id = factory(App\Question::class)->create()->id;
+        $fake_question_id = factory(Question::class)->create()->id;
     }
 
     return [
