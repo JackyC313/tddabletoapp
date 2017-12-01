@@ -73,6 +73,8 @@ class ModelMethodTest extends TestCase
      *      - getAllUnansweredQuestions
      *      - getAllAnsweredQuestions
      * 
+     * Question
+     *      - questionValidationArray
      */
 
     /**
@@ -138,5 +140,62 @@ class ModelMethodTest extends TestCase
 
         // unAnswered Question id should be in the returned collection
         $this->assertContains($expectedAssertion, $questions_unanswered->pluck('id')->toArray());
+    }
+
+    /**
+     * User - saveUserAnswer
+     * 
+     * Given a user have selected and posted an answer
+     * Calling $user->saveUserAnswer($question, $input_answer_id) 
+     *      with $user being the user the answer belongs to
+     *      with $question being the question the answer belongs to
+     *      and $input_answer_id beind the option id of selected answer 
+     * Answer's table should have an entry with the proper UserId, QuestionId and AnswerId
+     * 
+     * @group UnitModelMethodTest 
+     * @test
+     * @return void
+     */   
+    public function testUser_saveUserAnswer()
+    {
+        // Calling $user->getAllUnansweredQuestions() with $user being the newly created user 
+        $user = $this->user;
+        $question = $this->question_unanswered;
+        $input_answer_id = $this->option_unanswered;
+
+        $this->user->saveUserAnswer($question, $input_answer_id);
+
+        $storedAnswer = Answer::where('user_id', $this->user->id)
+            ->where('question_id', $this->question_unanswered->id)
+            ->where('option_id', $input_answer_id)
+            ->get();
+
+        $expectedAssertion = 1;
+
+        // unAnswered Question id should be in the returned collection
+        $this->assertCount($expectedAssertion, $storedAnswer);
+    }
+
+    /**
+     * Question - validationArray
+     * 
+     * Given a question
+     * Calling $question->validationArray($keyPrefix) with $keyPrefix as a sting prefix for the indexed question id
+     * An Array should be returned with all valid option responses in the format "required|in:optionId1,optionId2, optionId3,etc"
+     * 
+     * @group UnitModelMethodTest 
+     * @test
+     * @return void
+     */   
+    public function testQuestion_validationArray()
+    {
+        // Calling $question->questionValidationArray($keyPrefix) with $keyPrefix as a sting prefix for the indexed question id
+        $validate = [];
+        $keyPrefix = 'question_';
+        $validate = $this->question->validationArray($keyPrefix);
+        $expectedAssertion = "required|in:".$this->option->id;
+        
+        // unAnswered Question id should be in the returned collection
+        $this->assertEquals($expectedAssertion, $validate['question_1']);
     }
 }

@@ -68,4 +68,17 @@ class User extends Authenticatable
         });
         return $questions_answered;
     }
+
+    public function saveUserAnswer(Question $question, $input_answer_id)
+    {
+        $user = $this;
+        // store in answer
+        $submittedAnswer = new Answer();
+        $submittedAnswer->option_id = $input_answer_id;
+        $submittedAnswer->question_id = $question->id;
+        $submittedAnswer->user_id = $user->id;
+    
+        $submittedAnswer->save();
+    }
+
 }

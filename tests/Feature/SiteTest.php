@@ -220,4 +220,61 @@ class SiteTest extends TestCase
             ->assertSeeText('Question Results Page');
     }
 
+    /**
+     * [POST] 
+     * /question/{question}/submit      - question submit       [login protected]
+     * 
+     * While logged in 
+     * Going to Question Submit page with the question_id of a question the user HAVE answered
+     * Should show "Question Results Page" in heading
+     * 
+     * @group UnitSiteTest 
+     * @test
+     * @return void
+     */
+    public function testQuestionSubmitPageLoggedInHaveNotAnsweredPost()
+    {
+        $question_id = $this->question_unanswered->id;
+        $option_id = $this->option_unanswered->id;
+        
+        $data = array(
+            'question_'.$question_id => $option_id
+        );
+
+        $this->actingAs($this->user)
+            ->post('/question/'.$question_id.'/submit', $data)
+            ->assertStatus(302)
+            ->assertRedirect('question/'.$question_id.'/results')
+            ->followRedirects()
+            ->assertSeeText('Question Page');
+    }
+
+    /**
+     * [POST] 
+     * /question/{question}/submit      - question submit       [login protected]
+     * 
+     * While logged in 
+     * Going to Question Submit page with the question_id of a question the user HAVE answered
+     * Should send you to dashboard
+     * 
+     * @group UnitSiteTest 
+     * @test
+     * @return void
+     */
+    public function testQuestionSubmitPageLoggedInHaveAnsweredPost()
+    {
+        $question_id = $this->question->id;
+        $option_id = $this->option->id;
+        
+        $data = array(
+            'question_'.$question_id => $option_id
+        );
+
+        $this->actingAs($this->user)
+            ->post('/question/'.$question_id.'/submit', $data)
+            ->assertStatus(302)
+            ->assertRedirect('/dashboard')
+            ->followRedirects()
+            ->assertSeeText('Dashboard Home');
+    }    
 }
